@@ -11,3 +11,7 @@ and more information is given in comments
 In Practice_2 I am do some advance Javascript work or ES6 fundamentals like arrow function, rest parameter,set, promise, async await, class and many more
 There are some methods related to string like padstart,padend,startwith,endwith and some methods related to number are given with examples.
 and more information is given in comments
+
+**## Practice_3 ##**
+
+In Practice_3 I am do some program related to array, string and obects.
