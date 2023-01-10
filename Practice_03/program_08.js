@@ -1,3 +1,4 @@
+//dout_full
 const sort_by=(arr,props,orders)=>{
   // return [...arr].sort((a, b) =>
   //   props.reduce((acc, prop, i) => {
