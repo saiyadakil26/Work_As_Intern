@@ -19,4 +19,4 @@ const array_to_string=(arr)=>{
     let finaloutput=output+"\\n"+val
     return finaloutput
 }
- console.log(array_to_string([{col1:"a",col2:"b"},{col1:"c",col2:"d",col3:"e"}])) 
+ console.log(array_to_string([{col1:"a",col2:"b"},{col1:"c",col2:"d"}])) 
