@@ -14,5 +14,6 @@ const replace_keys=(obj,replace_obj)=>{
     // console.log(rename(obj))
     
 }
+// {[]:"okok"}
 
  console.log(replace_keys({name:"Akil",job:"Nodejs Intern",age:19},{name:"firstname",job:"Role"}))

@@ -7,9 +7,11 @@ const time_convert=(time)=>{
     //     time=time-12
     //     console.log(`${time} pm`);
     // }
-    output = time<12? time!==0?time+" am":"12 am" :time!==12? time!==24?time-12+" pm":"12 am" :"12 pm"
+    //let output = time<12? time!==0?time+" am":"12 am" :time!==12? time!==24?time-12+" pm":"12 am" :"12 pm"
+    let output= (time<12 && time!==0 && time+" am") || (time>12 && time!==24 && (time-12)+" pm") || (time===12 && "12 pm") || (time==0 && "12 am") || (time==24 && "12 am")
     console.log(output)
 }
+
 
 time_convert(0)
 time_convert(12)

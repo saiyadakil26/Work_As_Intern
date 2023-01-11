@@ -1,4 +1,5 @@
 //dout_full
+
 const sort_by=(arr,props,orders)=>{
 
     // return [...arr].sort((a, b) =>
@@ -12,10 +13,10 @@ const sort_by=(arr,props,orders)=>{
     // )
 
     return arr.sort((a,b)=>{
-              for (const i of props) {
+              for (const key of props) {
               let idx=props.indexOf(i)
-                let val1=a[i]
-                let val2=b[i]
+                let val1=a[key]
+                let val2=b[key]
                 if (typeof val1 === 'string') {
                       val1=val1.toLowerCase()
                       val2=val2.toLowerCase()
@@ -32,8 +33,8 @@ let obj=[
   {name:"akil",age:20}, 
 ]
 
-let order_by=['name',"age"]
+let order_by=['age',"name"]
 
-let order=['asc','asc']
+let order=['desc','asc']
 
 console.log(sort_by(obj,order_by,order))
