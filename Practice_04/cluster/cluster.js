@@ -2,7 +2,10 @@ const cluster = require('node:cluster');
 
 if (cluster.isPrimary) {
     const worker = cluster.fork();
-    worker.kill()
+    // cluster.fork();
+    worker.on('data',(data)=>{
+      console.log(data);
+    })
     worker.on('exit', (code, signal) => {
       if (signal) {
         console.log(`worker was killed by signal: ${signal}`);
@@ -12,4 +15,6 @@ if (cluster.isPrimary) {
         console.log('worker success!');
       }
     });
+  }else{
+    console.log("Hello from worker "+process.pid);
   }

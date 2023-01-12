@@ -9,6 +9,11 @@ const fs=require('fs')
 //     console.log("text added");
 // })
 
+// let data="Hello from file."
+// fs.writeFile('hello.txt',data,{flag:"a"},(err)=>{
+//     console.log("text added");
+// })
+
 // let data="\nappend data in hello."
 // fs.appendFile('hello.txt',data,(err)=>{
 //     console.log("Append Succsesful");

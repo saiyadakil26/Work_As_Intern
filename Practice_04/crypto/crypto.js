@@ -18,7 +18,7 @@ console.log(hash1==hash);
 // ! Encription - Decription.
 
 let iv=crypto.randomBytes(16)
-let key = crypto.scryptSync(password, 'salt', 32);
+let key = crypto.scryptSync(password, 'salt', 32); //key dout.
 
 let ciper=crypto.createCipheriv('aes-256-cbc',key,iv)
 let encrpt=ciper.update(password,'utf-8','hex')

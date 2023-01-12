@@ -1,6 +1,9 @@
+const { read } = require('fs');
 const stream=require('stream')
 
-// const readstream=new stream.Readable()
+// const readstream=new stream.Readable({
+//     read(){}
+// })
 
 // readstream.push('hello')
 // readstream.push('akil')
@@ -10,8 +13,9 @@ const stream=require('stream')
 // readstream.pipe(process.stdout)
 
 const writstream=new stream.Writable({
-    write(chunk){
+    write(chunk,encoding,cb){
         console.log(chunk.toString());
+        cb()
     }
 })
 

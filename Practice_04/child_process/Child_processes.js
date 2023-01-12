@@ -1,5 +1,4 @@
 const cp=require('child_process')
-const { stdout, stderr } = require('process')
 
 let cmd={
     list:'dir',
@@ -7,7 +6,7 @@ let cmd={
     folder:"mkdir"
 }
 
-// let child=cp.exec("dir",(err,stdout,stderr)=>{
+// let child=cp.exec(cmd.list,(err,stdout,stderr)=>{
 //     if (err) console.log(err);
 //     else console.log(stdout);
 // })
@@ -26,6 +25,7 @@ let cmd={
 // child.on('message',(msg)=>{
 //     console.log(`Process Message: ${msg}`);
 // })
+
 // child.on('exit',(code,sign)=>{
 //     console.log(`Procee end with ${code} code and ${sign} signal`);
 // })
@@ -48,8 +48,8 @@ let cmd={
 // })
 
 
-// let child=cp.spawn("node hello.js",{shell:true,detached:true,stdio:"ignore"})
-// child.unref()
+let child=cp.spawn("node hello.js",{shell:true,detached:true,stdio:"ignore"})
+child.unref()
 
 
 
@@ -68,17 +68,17 @@ let cmd={
 //     console.log(err);
 // })
 
-const { exec } = require("child_process");
-// Run this in git bash
-// execute the given command and give the output of it
-exec("dir", (error, stdout, stderr) => {
-    if (error) {
-        // if command is not executed then give error On success it will null
-        return console.log("Error:", error.message); // con failure contain instance of Error
-    }
-    if (stderr) {
-        // If command is executed but error occured in shell then give that err
-        return console.log(`stderr: ${stderr}`);
-    }
-    console.log(stdout); // give output
-});
+// const { exec } = require("child_process");
+// // Run this in git bash
+// // execute the given command and give the output of it
+// exec("dir", (error, stdout, stderr) => {
+//     if (error) {
+//         // if command is not executed then give error On success it will null
+//         return console.log("Error:", error.message); // con failure contain instance of Error
+//     }
+//     if (stderr) {
+//         // If command is executed but error occured in shell then give that err
+//         return console.log(`stderr: ${stderr}`);
+//     }
+//     console.log(stdout); // give output
+// });
