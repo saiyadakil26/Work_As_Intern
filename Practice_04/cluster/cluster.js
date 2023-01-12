@@ -3,6 +3,7 @@ const cluster = require('node:cluster');
 if (cluster.isPrimary) {
     const worker = cluster.fork();
     // cluster.fork();
+    // cluster.fork();
     worker.on('data',(data)=>{
       console.log(data);
     })

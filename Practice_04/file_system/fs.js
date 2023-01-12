@@ -42,3 +42,5 @@ const fs=require('fs')
 // fs.unlink('hello.txt',(err)=>{
 //     console.log('File deleted');
 // })
+
+fs.readFile()

@@ -7,3 +7,10 @@ console.log(path.join(__dirname,"\\hello.js"));
 let  obj = { dir: 'D:\\Pratice_\\Practice_04\\path', base: 'path.js' }
 console.log(path.format(obj));
 console.log(path.normalize(__dirname));
+
+console.log(path.isAbsolute(__dirname));
+console.log(path.isAbsolute("../hello/hello.js"));
+
+console.log(path.resolve('path1','hello.js'));
+console.log(path.resolve('/path1','hello.js'));
+console.log(path.resolve('/path1','../hello.js'));
