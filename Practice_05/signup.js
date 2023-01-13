@@ -12,10 +12,10 @@ const signup =async(data)=>{
             }
 
             let paten= /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-            if ( ! email.match(paten)) {
+            if ( ! (email.match(paten))) {
                 res("Please Provide valid E-mail")
             }
-            if (! mobile_number.toString().length==10) {
+            if (! (mobile_number.toString().length == 10)) { 
                 res("Please Provide valid Mobile Number")
             }
 
