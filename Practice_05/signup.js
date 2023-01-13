@@ -45,13 +45,16 @@ const signup =async(data)=>{
     data.password = crypto.createHmac('sha256', secret).update(data.password).digest('hex');
     let v= await valid(obj,data)
     if (v=="all validate") {
+        let salt = crypto.randomBytes(16).toString('base64');
+        let hash = crypto.createHmac('sha512',salt).update(data.password).digest("base64");
+        let token = salt + "$" + hash;
+        data["token"]=[token]
         obj.push(data)
-        console.log(obj);
         let new_data = JSON.stringify(obj);
         fs.writeFileSync("db.json", new_data, (err) => {
             if (err) throw err;
         }); 
-        return {code:200,msg:"signup Succsessfully"} 
+        return {code:200,msg:"signup Succsessfully",token:token} 
     }
     else{
         return {code:201,msg:v}
