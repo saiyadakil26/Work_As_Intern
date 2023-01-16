@@ -1,7 +1,7 @@
 const login = require('../controler/login')
 const signup=require('../controler/signup')
 const logout=require('../controler/logout')
-
+const users=require('../controler/users')
 const user_router=require('./user')
 
 const body_parser=require('../body_parser')
@@ -36,9 +36,17 @@ const rout= async (req,res)=>{
             res.end(data.msg)
          })  
 
-    }else if( req.url == "/user"){
+    }
+    else if( req.url == "/user"){
+
         let token=req.headers.authorization || ""
         user_router(req,res,token)
+
+    }
+    else if( req.url == "/users"){
+
+        users(req,res)
+
     }
     else{
         res.writeHead(404,"Page Not Found")
