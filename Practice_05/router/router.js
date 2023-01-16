@@ -1,7 +1,9 @@
 const login = require('../controler/login')
 const signup=require('../controler/signup')
 const logout=require('../controler/logout')
-const user_delete=require('../controler/delete')
+
+const user_router=require('./user')
+
 const body_parser=require('../body_parser')
 
 const rout= async (req,res)=>{
@@ -34,14 +36,9 @@ const rout= async (req,res)=>{
             res.end(data.msg)
          })  
 
-    }else if( req.url == "/delete" && req.method == 'DELETE'){
-
+    }else if( req.url == "/user"){
         let token=req.headers.authorization || ""
-        user_delete(token).then((data)=>{
-            res.writeHead(data.code,data.msg)
-            res.end(data.msg)
-         })  
-
+        user_router(req,res,token)
     }
     else{
         res.writeHead(404,"Page Not Found")
