@@ -7,9 +7,8 @@ const login =async(data,token)=>{
     let old_data = fs.readFileSync(__dirname+"\\db.json");
     let obj = JSON.parse(old_data);
     data=JSON.parse(data)
-
     const secret = '1234536478563940849304975937263s';  
-    data.password = crypto.createHmac('sha256', secret).update(data.password).digest('hex');
+    data.password = crypto.createHmac('sha256', secret).update(data.password.trim()).digest('hex');
     try {
         let v= await valid(obj,data,token)
         if (v=="Authenticated") {

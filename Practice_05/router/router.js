@@ -1,6 +1,7 @@
 const login = require('../controler/login')
 const signup=require('../controler/signup')
 const logout=require('../controler/logout')
+const user_delete=require('../controler/delete')
 const body_parser=require('../body_parser')
 
 const rout= async (req,res)=>{
@@ -29,6 +30,14 @@ const rout= async (req,res)=>{
 
         let token=req.headers.authorization || ""
         logout(token).then((data)=>{
+            res.writeHead(data.code,data.msg)
+            res.end(data.msg)
+         })  
+
+    }else if( req.url == "/delete" && req.method == 'DELETE'){
+
+        let token=req.headers.authorization || ""
+        user_delete(token).then((data)=>{
             res.writeHead(data.code,data.msg)
             res.end(data.msg)
          })  

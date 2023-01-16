@@ -2,6 +2,8 @@ const valid=(all_user_data,data)=>{
 
     return new Promise((res,rej)=>{
         let {email,mobile_number,password} =data
+        email=email.trim()
+        mobile_number=mobile_number.trim()
 
         if (!(email&& mobile_number&& password)) { //required field
             rej("Please Provide Requred Information")
