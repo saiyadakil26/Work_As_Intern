@@ -1,0 +1,11 @@
+<form method="post">
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">update To DO : </label>
+      <input type="text" class="form-control" id="todo" name="todo" value='<%= data.name %>' />
+      <select class="btn btn-secondary w-auto m-2" name="option">
+        <option value="-1">Set As</option>
+        <option value="1">Done</option>
+        <option value="0">Panding</option>
+      </select>
+    <button type="submit" class="btn btn-dark">Update</button>
+  </form>

@@ -1,0 +1,14 @@
+<ul class="list-group">
+    <% data.forEach((el,i)=>{%>
+        <li class="list-group-item"> <%= el.name %> 
+         <a href=<%="edit/"+i %>>  <button class="btn btn-dark float-end m-2">Edit</button></a>
+         <a href=<%="delete/"+i %>>  <button class="btn btn-danger float-end m-2">Delete</button> </a>
+         <% if(el.status==0){%>
+            <a href=<%="update/"+i %>>  <button class="btn btn-success float-end m-2">Set as Done</button></a>
+         <%}else{%>
+            <p class="btn btn-outline-success float-end m-2">Done</p>
+         <%}%>
+        </li>
+       
+    <% }) %>
+</ul>
