@@ -2,7 +2,7 @@ let data=[
     {
     profileId: 123,
     insites:{
-      date: new Date(11-11-2023),
+      date: new Date(2023,11,11),
       reaach: 120,
       eng: 10,
       likes: 105
@@ -11,7 +11,7 @@ let data=[
     },
     {
      insites: {
-        date: new Date(11-10-2023),
+        date: new Date(2023,11,10),
         reaach: 119,
         eng: 5,
         likes: 101
@@ -20,7 +20,7 @@ let data=[
     {
         profileId: 124,
         insites:{
-          date: new Date(11-12-2023),
+          date: new Date(2023,11,10),
           reaach: 118,
           eng: 2,
           likes: 100
@@ -39,6 +39,26 @@ const sort_by=(data,by="date",order="asc")=>{
     order=="asc" ? data.sort((a,b)=> a.insites[by] - b.insites[by]) : data.sort((a,b)=> b.insites[by] - a.insites[by])
     return data
 }
+
+const group_by_date=(data)=>{
+    let new_data=data.map((el)=>el.insites.date.toDateString())
+    let all_date=[...new Set(new_data)]
+    let output=[]
+    all_date.forEach((el)=>{
+        let group_data=data.filter((elm)=>elm.insites.date.toDateString()==el)
+        output.push({[el]:group_data})
+    })
+    return output
+}
+
+let group=group_by_date(data)
+group.forEach((el,i)=>{
+    [el]=Object.values(el)
+    let sort = sort_by(el,"reaach","desc")
+    group[i]=sort
+})
+
+console.log(group);
 
 // let new_data=sort_by(data,"reaach","asc")
 // console.log(new_data);
