@@ -1,4 +1,4 @@
-const data_type=require('./data_type_check')
+const data_type=require('./01_data_type_check')
 
 const type_validator=(val,type)=>{
     type=type.toLowerCase()

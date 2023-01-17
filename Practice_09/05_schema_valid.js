@@ -1,5 +1,5 @@
-const type_validator = require('./type_validator')
-const data_type=require('./type_validator')
+const type_validator = require('./01_type_validator')
+
 const User_schema={
     email:{
         required:true,
