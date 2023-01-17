@@ -1,7 +1,4 @@
-const is_number=(val)=>{
-    if (typeof val === "number")  return  val != NaN && val !=Infinity
-    return  val != NaN && val !=Infinity && !isNaN(Number(val))
-}
+const is_number=(val)=> val !=Infinity && !isNaN(Number(val))
 
 const is_string=(val)=>typeof val === "string"
 
@@ -9,7 +6,7 @@ const is_boolean=(val)=>typeof val === "boolean"
 
 const is_arry=(val)=> Array.isArray(val)
 
-const is_object=(val)=> typeof val === "object" && !(Array.isArray(val)) && val != null && !(val instanceof Date)
+const is_object=(val)=> val.constructor.toString().indexOf('Object')!= -1 ? true : false
 
 const is_date=(val)=> val instanceof Date
 

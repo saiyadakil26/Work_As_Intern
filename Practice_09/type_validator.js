@@ -18,8 +18,10 @@ const type_validator=(val,type)=>{
         case "function":
             return data_type.is_function(val)
         default:
-            return false
+            return typeof val === type
     }
 }
 
-console.log(type_validator(123,"number"))
+// console.log(type_validator({},"object"))
+
+module.exports=type_validator
