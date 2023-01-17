@@ -50,15 +50,17 @@ const group_by_date=(data)=>{
     })
     return output
 }
+const group_sort=(data,by,order)=>{
+    let group=group_by_date(data)
+    group.forEach((el,i)=>{
+        [el]=Object.values(el)
+        let sort = sort_by(el,by,order)
+        group[i]=sort
+    })
+    return group
+}
 
-let group=group_by_date(data)
-group.forEach((el,i)=>{
-    [el]=Object.values(el)
-    let sort = sort_by(el,"reaach","desc")
-    group[i]=sort
-})
-
-console.log(group);
+console.log(group_sort(data,"reaach","desc"));
 
 // let new_data=sort_by(data,"reaach","asc")
 // console.log(new_data);
