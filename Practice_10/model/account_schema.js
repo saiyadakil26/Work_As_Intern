@@ -24,11 +24,11 @@ const account_schema= new mongoose.Schema({
         required:true,
         default:false
     },
-    created_on:{
-        type:Date,
-        required:true,
-        default:Date.now
-    },
+    // created_on:{
+    //     type:Date,
+    //     required:true,
+    //     default:Date.now
+    // },
     login_id:[{
         type: mongoose.Schema.Types.ObjectId,
         required:true
@@ -41,6 +41,6 @@ const account_schema= new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true
     }
-})
+},{ timestamps: { createdAt: 'created_at' } })
 
 module.exports=mongoose.model('Account',account_schema)

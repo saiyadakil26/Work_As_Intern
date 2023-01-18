@@ -37,16 +37,16 @@ const user_schema= new mongoose.Schema({
         required:true,
         ref:"Client"
     }],
-    created_on:{
-        type:Date,
-        required:true,
-        default:Date.now
-    },
+    // created_on:{
+    //     type:Date,
+    //     required:true,
+    //     default:Date.now
+    // },
     is_Active:{
         type:Boolean,
         required:true,
         default:true
     } 
-})
+},{ timestamps: { createdAt: 'created_at' } })
 
 module.exports=mongoose.model('User',user_schema)

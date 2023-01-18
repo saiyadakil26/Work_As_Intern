@@ -15,11 +15,11 @@ const clien_schema= new mongoose.Schema({
         required:true,
         default:0 
     },
-    created_on:{
-        type:Date,
-        required:true,
-        default:Date.now
-    },
+    // created_on:{
+    //     type:Date,
+    //     required:true,
+    //     default:Date.now
+    // },
     appDesc:{
         type:String,
         required:true 
@@ -33,6 +33,6 @@ const clien_schema= new mongoose.Schema({
         required:true,
         default:true
     } 
-})
+},{ timestamps: { createdAt: 'created_at' } })
 
 module.exports=mongoose.model('Client',clien_schema)
