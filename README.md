@@ -23,3 +23,23 @@ In Practice_4 I am do some program related to core module of Nodejs like child p
 **## Practice_5 ##**
 
 In Practice_5 I am do some small program related to Authentication I used http, File System, Crypto for that.
+
+**## Practice_6 ##**
+
+In Practice_6 I am do some small program related to signup and signIn  I used koaJs and Jwt for that.
+
+**## Practice_7 ##**
+
+In Practice_7 I am create todo application using koaJs and file system, I set Routes using Koajs.
+
+**## Practice_8 ##**
+
+In Practice_8 I am create API for GET, POST, PUT, PATCH and DELETE Using random data.
+
+**## Practice_9 ##**
+
+In Practice_9 I am create program related to type validator, Json_string converter, Email validator, Strong Password validator and many more.
+
+**## Practice_10 ##**
+
+In Practice_10 I am create Schema using moongose to validate user, account and customer data.
