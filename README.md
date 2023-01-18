@@ -23,3 +23,11 @@ In Practice_4 I am do some program related to core module of Nodejs like child p
 **## Practice_5 ##**
 
 In Practice_5 I am do some small program related to Authentication I used http, File System, Crypto for that.
+
+**## Practice_6 ##**
+
+In Practice_6 I am do some small program related to signup and signIn  I used koaJs and Jwt for that.
+
+**## Practice_7 ##**
+
+In Practice_7 I am create todo application using koaJs and file system, I set Routes using Koajs.
