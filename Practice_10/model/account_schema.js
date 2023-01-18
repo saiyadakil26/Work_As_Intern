@@ -29,10 +29,10 @@ const account_schema= new mongoose.Schema({
     //     required:true,
     //     default:Date.now
     // },
-    login_id:[{
+    login_id:{
         type: mongoose.Schema.Types.ObjectId,
         required:true
-    }],
+    },
     access_user:[{
         type:mongoose.Schema.Types.ObjectId,
         required:true
