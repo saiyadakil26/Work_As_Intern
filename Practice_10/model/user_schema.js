@@ -32,7 +32,7 @@ const user_schema= new mongoose.Schema({
         required:true,
         enum:["admin","team","owner"]
     },
-    clint_id:[{
+    client_id:[{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:"Client"

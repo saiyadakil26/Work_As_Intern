@@ -1,0 +1,395 @@
+1 ) use 
+
+-> To create or switch database
+
+Query : use Mongodb_operator
+Output : create and switch database to Mongodb_operator
+
+2) InsertOne
+
+-> To insert one is insert one document in given collection
+
+Query : db.shop.InsertOne({item:"chisel",sku:"C001",quantity:4,instock:true})
+Output :
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("63c917392144b270264c4a26")
+  }
+}
+
+3) InserMany
+
+-> To insert one or more document in given collection
+
+Query : db.products.insertMany([ { "item": "chisel", "sku": "C001", "quantity": 4, "instock": true }, { "item": "nails", "sku": "unknown", "quantity": 100, "instock": true }]) 
+Output :
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("63c917392144b270264c4a26"),
+    '1': ObjectId("63c917392144b270264c4a28")
+  }
+}
+
+4) find()
+
+-> find return all the document which setiesfy condition which is given in argument
+
+Query : db.products.find({}) //here inside {} give the condition
+Output : 
+
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a26"),
+    item: 'chisel',
+    sku: 'C001',
+    quantity: 4,
+    instock: true
+  },
+  {
+    _id: ObjectId("63c917392144b270264c4a27"),
+    item: 'hammer',
+    sku: 'unknown',
+    quantity: 3,
+    instock: true
+  },
+  {
+    _id: ObjectId("63c917392144b270264c4a28"),
+    item: 'nails',
+    sku: 'unknown',
+    quantity: 100,
+    instock: true
+  }
+]
+
+5) findOne
+
+-> it work just like find but return only first document which setiesfy condition.
+
+Query : findOne({{instock:true}})
+Output :
+{
+  _id: ObjectId("63c917392144b270264c4a26"),
+  item: 'chisel',
+  sku: 'C001',
+  quantity: 4,
+  instock: true
+}
+
+6) Project
+
+-> In project we give field with value 0 is not include in result and which are declair with one is allowed.
+   In Example _id specify with 0 mean _id not includes in result and item with one means item includes.
+
+Query : db.products.aggregate({$project:{_id:0,item:1}})
+Output : [ { item: 'chisel' }, { item: 'hammer' }, { item: 'nails' } ]
+
+7) updateOne
+
+-> Update one update first document which is sefisfy condition the update value of field  which is specify with $set operator 
+
+Query : db.products.updateOne({_id: ObjectId("63c917392144b270264c4a26")},{$set:{quantity:5}})
+Output : 
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+8) updateMany
+
+-> updateMany is just work like updateOne but update all document which setisfy condition
+
+Query : db.products.updateMany({item:'chisel'},{$set:{quantity:5}})
+Output : 
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+9) set
+
+-> set operator used with updateOne and updateMany to set new value to the field
+
+10) unset
+
+-> unset is also used in updateOne and updateMany but it is unset means remove field from document which is satisfy condition.
+
+Query : db.products.updateOne({ sku: "unknown" },{ $unset: { quantity: "", instock: "" } })
+Output : remove quantity and instock field from first document which satisfy condition.
+
+11) each
+
+-> each is used with $push and $addToset to set values in array like in given example query add 80,90 and 100 to the score array.
+
+Query :  db.products.updateOne({_id:ObjectId("63c924bdc5512f13ed25bf25")},{$push:{score:{$each:[80,90,100]}}})
+Output :
+{
+  _id: ObjectId("63c924bdc5512f13ed25bf25"),
+  item: 't-sirt',
+  sku: 'unknown',
+  quantity: 100,
+  instock: true,
+  score: [
+    10, 20, 30, 40,  50,
+    60, 70, 80, 90, 100
+  ]
+}
+
+12) push 
+
+-> push is used to add values in the array at field value in any document the example of push is given above in $each
+
+13) pull
+
+-> pull is used to remove values in the array at field value in any document using $in
+
+Query :  db.products.updateOne({_id:ObjectId("63c924bdc5512f13ed25bf25")},{$pull:{score:{$in:[80,90,100]}}})
+Output : 
+{
+  _id: ObjectId("63c924bdc5512f13ed25bf25"),
+  item: 't-sirt',
+  sku: 'unknown',
+  quantity: 100,
+  instock: true,
+  score: [
+    10, 20, 30, 40,
+    50, 60, 70
+  ]
+}
+
+14) addToSet
+
+-> addToSet is first find document which setisfy condition then looking for field and its value if given field exist then add values in it
+   else add the field and given values.
+
+Query :  db.products.updateOne({_id:ObjectId("63c924bdc5512f13ed25bf25")},{$addToSet:{score:{$each:[80,90,100]}}})
+Output : 
+{
+  _id: ObjectId("63c924bdc5512f13ed25bf25"),
+  item: 't-sirt',
+  sku: 'unknown',
+  quantity: 100,
+  instock: true,
+  score: [
+    10, 20, 30, 40,  50,
+    60, 70, 80, 90, 100
+  ]
+}
+
+15) in 
+
+-> in operator select the document where value of the field is equal to the value is given in array
+   example of $in is given above in $pull 
+
+16) inc
+
+-> $inc is used to increament a specific field value by any value.
+    you can pass positive value to $inc for increase value and nagitive value to decrease value
+
+Query :  db.products.updateOne({_id:ObjectId("63c924bdc5512f13ed25bf25")},{$inc:{quantity:1}})
+Output : 
+{
+  _id: ObjectId("63c924bdc5512f13ed25bf25"),
+  item: 't-sirt',
+  sku: 'unknown',
+  quantity: 101,
+  instock: true,
+  score: [
+    10, 20, 30, 40,  50,
+    60, 70, 80, 90, 100
+  ]
+}
+
+17) filter
+
+-> filter is used to match condition to the all document and return the array of document which is satisfy the condition
+
+Query :  db.sales.aggregate([ { $project: { items: { $filter: { input: "$items", as: "item", cond: { $gte: ["$$item.quantity", 100] } } } } }])
+Output : [ { _id: 0, items: [] }, { _id: 1, items: [] }, { _id: 2, items: [] } ]
+
+filter take input as input variable take condition as cond and as for the aliase
+
+18) gte
+
+-> here gte means greater than and equal to its used to set conditions you can se it in above example.
+
+19) sample
+
+-> sample give us random document from given collection according to specific size
+
+Query : db.products.aggregate({$sample:{size:1}})
+Output : 
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a28"),
+    item: 'nails',
+    sku: 'unknown',
+    quantity: 100,
+    instock: true
+  }
+]
+
+20) and
+
+-> $and is work just like a AND logical operator we can use $ and when we want to apply two condition and select document.
+
+Query : db.products.find({$and:[{sku:"unknown"},{quantity:{$gte:100}}]})
+Output : 
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a28"),
+    item: 'nails',
+    sku: 'unknown',
+    quantity: 100,
+    instock: true
+  },
+  {
+    _id: ObjectId("63c924bdc5512f13ed25bf25"),
+    item: 't-sirt',
+    sku: 'unknown',
+    quantity: 101,
+    instock: true
+  }
+]
+
+21) or
+
+-> $or is also just work like a logical OR when we want to compare two condition and return document if one condition is satisfy
+
+Query : db.products.find({$or:[{sku:"unknown"},{quantity:{$gte:100}}]})
+Output : 
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a27"),
+    item: 'hammer',
+    sku: 'unknown'
+  },
+  {
+    _id: ObjectId("63c917392144b270264c4a28"),
+    item: 'nails',
+    sku: 'unknown',
+    quantity: 100,
+    instock: true
+  },
+  {
+    _id: ObjectId("63c924bdc5512f13ed25bf25"),
+    item: 't-sirt',
+    sku: 'unknown',
+    quantity: 101,
+    instock: true
+  }
+]
+
+22) cond
+
+-> here $cond means condition it take array of three value first is boolean based on that condition render then then case and else case
+   in below example we are check whether quantityis more then 100 the discount 30% else 20% 
+
+Query : db.products.aggregate({$project:{_id:0,item:1,discount:{$cond:[{$gte:["$quantity",100]},30,20]}}})
+Output : 
+[
+  { item: 'chisel', discount: 20 },
+  { item: 'hammer', discount: 20 },
+  { item: 'nails', discount: 30 },
+  { item: 't-sirt', discount: 30 }
+]
+
+23) if then else
+
+-> we can use if then else in condition in space of array and write above query like that
+
+Query :  db.products.aggregate({$project:{_id:0,item:1,discount:{$cond:{if:{$gte:["$quantity",100]},then:30,else:20}}}})
+Output : will be same as above
+
+24) unwind
+
+-> unwind destructure array field and for each element of array whole document printed.
+
+Query : db.products.aggregate({$unwind:"$score"})
+Output : 
+[
+  {
+    _id: ObjectId("63c924bdc5512f13ed25bf25"),
+    item: 't-sirt',
+    sku: 'unknown',
+    quantity: 101,
+    instock: true,
+    score: 10
+  },
+  {
+    _id: ObjectId("63c924bdc5512f13ed25bf25"),
+    item: 't-sirt',
+    sku: 'unknown',
+    quantity: 101,
+    instock: true,
+    score: 20
+  },....]
+
+25) distinct
+
+-> $distinct find the distinct value of the given field and return as array
+
+Query : db.products.distinct("sku")
+Output : [ 'C001', 'unknown' ]
+
+26) countDocuments
+
+-> $countDocuments is count total number of document which is satisfy the condition
+
+Query : db.products.countDocuments({sku:"unknown"})
+Output : 3
+
+27) count
+
+-> You can use the $count stage to count the documents.
+
+Query: db.products.aggregate({$count:"My Count"}) || db.products.count({}) || db.products.find({}).count()
+Output : [{My Count:4}] || 4
+
+Query : db.products.aggregate( [ { $match: { sku:"unknown" } }, { $count: "scores" }])
+Output : [ {scores: 3 } ]
+
+28) bulkWrite
+
+-> we can use bulkWrite when we want to perform multipal operation at a time
+
+Query : db.pizzas.bulkWrite( [
+      { insertOne: { document: { _id: 3, type: "cheese", size: "medium", price: 6 } } },
+      { updateOne: { filter: { type: "cheese" }, update: { $set: { price: 8 } } } },
+      { deleteOne: { filter: { type: "cheese"} } },
+   ] )
+
+Output :
+{
+  acknowledged: true,
+  insertedCount: 1,
+  insertedIds: { '0': 3 },
+  matchedCount: 1,
+  modifiedCount: 1,
+  deletedCount: 1,
+  upsertedCount: 0,
+  upsertedIds: {}
+}
+
+29) deleteOne
+
+-> delete the document which is satisfy condition
+
+Query : db.pizzas.deleteOne({ filter: { type: "cheese"} )
+Output : document delete
+
+30) deleteMany
+
+-> delete the all document which is satisfy condition
+
+Query : db.pizzas.deleteMany({ filter: { type: "cheese"} )
+Output : delete all document 
+
+
