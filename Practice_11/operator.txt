@@ -382,14 +382,144 @@ Output :
 
 -> delete the document which is satisfy condition
 
-Query : db.pizzas.deleteOne({ filter: { type: "cheese"} )
+Query : db.pizzas.deleteOne({ type: "cheese"} )
 Output : document delete
 
 30) deleteMany
 
 -> delete the all document which is satisfy condition
 
-Query : db.pizzas.deleteMany({ filter: { type: "cheese"} )
+Query : db.pizzas.deleteMany({ type: "cheese"} )
 Output : delete all document 
 
+31) match 
 
+-> $ match take take first document which satisfy operation and pass to next pipeline stage.
+
+Query : db.products.aggregate( [ { $match: { sku:"unknown" } }, { $count: "scores" }])
+Output : [ {scores: 3 } ]
+
+32) lookup
+
+-> $lookup is used to connect two collection and featch data.
+
+Query :  db.products.aggregate({$lookup:{from:"sales",localField:"quantity",foreignField:"_id",as:"new_field"}})
+Output : 
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a26"),
+    item: 'chisel',
+    sku: 'C001',
+    quantity: 2,
+    instock: true,
+    new_field: [
+      { _id: 2, items: [ { item_id: 4, quantity: 1, price: 23 } ] }
+    ]
+  },...]
+
+33) expr
+
+-> $expr is used to write expression 
+
+Query :  db.monthly_budget.find({$expr:{$gt:["$spent","$budget"]}})
+Output : 
+[
+  { _id: 1, category: 'food', budget: 400, spent: 450 },
+  { _id: 2, category: 'drinks', budget: 100, spent: 150 }
+]
+
+34) eq
+
+->The $eq operator matches documents where the value of a field equals the specified value
+
+Query : db.monthly_budget.find({budget:{$eq:400}})
+Output : [ { _id: 1, category: 'food', budget: 400, spent: 450 } ]
+
+35) let
+
+$let Binds variables for use in the specified expression, and returns the result of the expression.
+
+Query : db.monthly_budget.aggregate({$project:{total:{$let:{vars:{},in:{$multiply:["$budget","$spent"]}}}}})
+Output : 
+[
+  { _id: 1, total: 180000 },
+  { _id: 2, total: 15000 },
+  { _id: 3, total: 5000 }
+]
+
+36) group
+
+-> $group is used to generate group of document by specific field.
+
+Query : db.monthly_budget.aggregate({$group:{_id:"$budget", averageQuantity: { $avg: "$spent" }}})
+Output : 
+[
+  { _id: 400, averageQuantity: 450 },
+  { _id: 100, averageQuantity: 100 }
+]
+
+37) sort
+
+-> $sort is used to sort our document by specific field (1 for asending , -1 for desending)
+
+Query : db.monthly_budget.aggregate({$sort:{budget:1}})
+Output : 
+[
+  { _id: 2, category: 'drinks', budget: 100, spent: 150 },
+  { _id: 3, category: 'clothes', budget: 100, spent: 50 },
+  { _id: 1, category: 'food', budget: 400, spent: 450 }
+]
+
+38) limit
+
+-> $limit is used to get Limits the number of documents passed to the next stage in the pipeline
+ 
+Query : db.monthly_budget.aggregate({$limit:1})
+Output : [ { _id: 1, category: 'food', budget: 400, spent: 450 } ]
+
+39) skip
+
+-> $skip Skips over the specified number of documents that pass into the stage and passes the remaining documents to the next stage in the pipeline.
+
+Query : db.monthly_budget.aggregate({$skip:1})
+Output : 
+[
+  { _id: 2, category: 'drinks', budget: 100, spent: 150 },
+  { _id: 3, category: 'clothes', budget: 100, spent: 50 }
+]
+
+40) cursor.toArray()
+
+-> toArray is return array of all document which is in cursor
+
+Query : var allProductsArray = db.products.find().toArray();
+        printjson (allProductsArray);
+Output : 
+[
+  {
+    _id: ObjectId("63c917392144b270264c4a26"),
+    item: 'chisel',
+    sku: 'C001',
+    quantity: 2,
+    instock: true
+  },...]
+
+41) element
+
+-> The $elemMatch operator matches documents that contain an array field with at least one element that matches all the specified query criteria.
+
+Query :  db.products.find({score:{$elemMatch:{$gte:50}}})
+Output : 
+[
+  {
+    _id: ObjectId("63c924bdc5512f13ed25bf25"),
+    item: 't-sirt',
+    sku: 'unknown',
+    quantity: 101,
+    instock: true,
+    score: [
+      10, 20, 30, 40,  50,
+      60, 70, 80, 90, 100
+    ]
+  }
+]
