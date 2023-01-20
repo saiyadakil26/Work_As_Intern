@@ -1,0 +1,91 @@
+1) find uniq user and number of connected account.
+
+Query : db.accounts.aggregate([{$group:{_id:{user_id:"$owner_id"},count:{$sum:1}}}])
+
+output : 
+[
+  { _id: { user_id: ObjectId("63c7d2afe143bf2b601e1078") }, count: 2 },
+  { _id: { user_id: ObjectId("63c7cbbde143bf2b601e1002") }, count: 1 },
+  { _id: { user_id: ObjectId("63c7d2afe143bf2b601e107a") }, count: 2 }
+]
+
+2) find uniq user and uniq accounts and number of account
+
+Query : 
+
+db.accounts.aggregate([
+    { "$group": {
+        "_id": {
+            "owner": "$owner_id",
+            "account": "$account_id"
+        },
+        "accountcount": { "$sum": 1 }
+    }},
+    { "$group": {
+        "_id": "$_id.owner",
+        "Accounts": { 
+            "$push": { 
+                "account": "$_id.account",
+                "count": "$accountcount"
+            },
+        }
+    }}])
+
+output : 
+[
+  {
+    _id: ObjectId("63c7cbbde143bf2b601e1002"),
+    Accounts: [ { account: 2, count: 1 } ]
+  },
+  {
+    _id: ObjectId("63c7d2afe143bf2b601e1078"),
+    Accounts: [ { account: 3, count: 2 } ]
+  },
+  {
+    _id: ObjectId("63c7d2afe143bf2b601e107a"),
+    Accounts: [ { account: 5, count: 1 }, { account: 1, count: 1 } ]
+  }
+]
+
+3) find user who connect two or more accounts
+
+Query : db.accounts.aggregate([{$group:{_id:{user_id:"$owner_id"},count:{$sum:1}}},{$match:{count:{$gte:2}}}])
+
+output : 
+[
+  { _id: { user_id: ObjectId("63c7d2afe143bf2b601e1078") }, count: 2 },
+  { _id: { user_id: ObjectId("63c7d2afe143bf2b601e107a") }, count: 2 }
+]
+
+4) find user who have age between 25 to 30
+
+Query : db.user.find({age:{$gt:25,$lt:35}}) || db.user.find({$and:[{age:{$gte:25}},{age:{$lte:35}}]})
+
+output : 
+[
+  {
+    _id: ObjectId("63c7d2afe143bf2b601e1078"),
+    password: '6w9yh44sm91r2urtstkbh066lo1jhs7opgm6lqy8',
+    email: 'saiyadakil26@gmail.com',
+    createdOn: ISODate("2015-07-03T08:55:41.000Z"),
+    owenerID: ObjectId("63c7d2afe143bf2b601e107a"),
+    address: { city: 'anand', pincode: 388110 },
+    role: 'admin',
+    name: 'akil',
+    client_id: ObjectId("63c7cbbde143bf2b601e1071"),
+    is_Active: true,
+    age: 27
+  }]
+
+5) find user who have age greater then 20
+
+Query : db.user.aggregate([{$project:{_id:1,age:1}},{$match:{age:{$gte:20}}}])
+
+output : 
+[
+  { _id: ObjectId("63c7d2afe143bf2b601e1078"), age: 27 },
+  { _id: ObjectId("63c7d2afe143bf2b601e107a"), age: 30 },
+  { _id: ObjectId("63c7d2afe143bf2b601e107b"), age: 39 },
+  { _id: ObjectId("63c7d2afe143bf2b601e107c"), age: 21 },
+  { _id: ObjectId("63c7d2afe143bf2b601e107d"), age: 30 }
+]

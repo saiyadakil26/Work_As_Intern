@@ -33,4 +33,46 @@
             > $box
             > $center
             > $centerSphere
-    =>
+            > $geometry
+            > $maxDistance
+            > $minDistance
+            > $polygon
+        * Array Query Operator *
+            > $elemMatch
+            > $all
+            > $size
+        * Bitwise Query Operator *
+            > $bitsAllClear
+            > $bitsAllSet 
+            > $bitsAnyClear
+            > $bitsAnySet  
+        * Projection Operator *
+            > $
+            > $elemMatch 
+            > $slice
+        * Miscellaneous Query Operator *
+            > $comment
+            > $rand 
+            > $natural  
+
+    => Update Operators
+        * Field Update Operators *
+            > $currentDate
+            > $inc
+            > $min
+            > $max
+            > $mul
+            > $rename
+            > $set
+            > $setOnInsert
+            > $unset
+        * Array Update Operators *
+            > $
+            > $[]
+            > $[]
+            > $max
+            > $mul
+            > $rename
+            > $set
+            > $setOnInsert
+            > $unset
