@@ -89,3 +89,12 @@ output :
   { _id: ObjectId("63c7d2afe143bf2b601e107c"), age: 21 },
   { _id: ObjectId("63c7d2afe143bf2b601e107d"), age: 30 }
 ]
+
+6) find user Id who have age 20+ ,residence of anand and connect twitter account (In this case Id 3 means twitter)
+
+Query : db.user.aggregate([{ $project: { _id: 1, age: 1, address: 1 } }, { $match: { age: { $gte: 20 }, "address.city": { $eq: "anand" } } }, { $lookup: { from: "accounts", pipeline:[{$match:{"account_id":{$eq:3}}}] , as: "account_docs", }},{$project:{_id:1}}])
+output : 
+[
+  { _id: ObjectId("63c7d2afe143bf2b601e1078") },
+  { _id: ObjectId("63c7d2afe143bf2b601e107b") }
+]
