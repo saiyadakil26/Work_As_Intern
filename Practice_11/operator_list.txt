@@ -1,0 +1,36 @@
+==> Operators
+
+    => Query and Projection Operators
+        * comparision operator *
+            > $eq
+            > $ne
+            > $gt
+            > $gte
+            > $lt
+            > $lte
+            > $in
+            > $nin
+        * Logical Operator *
+            > $not
+            > $and
+            > $or
+            > $nor
+        * Element Query Operator *
+            > $exist
+            > $type
+        * Eveluation Query Operator *
+            > $expr
+            > $jsonSchema
+            > $mod
+            > $regex
+            > $text
+            > $where
+        * Geospatial Query Operator *
+            > $geoIntersects
+            > $geoWithin
+            > $near
+            > $nearSphere
+            > $box
+            > $center
+            > $centerSphere
+    =>
