@@ -1,0 +1,31 @@
+index - is used to quickly retrivr data
+
+--> create index by using
+
+db.collection.createIndex(field:1) // 1 means asending order -1 means desending order
+
+
+--> see all indexs by using
+
+db.colection.getIndexes()
+
+--> In createIndex second argument is optional we can give their option like name of index ,index is uniq or not
+
+--> delete Index by using
+
+db.collection.dropIndexes({field:1})
+
+-->INXSCAN means index scan or CALLSCAN means collection scan
+
+--> to see the use of index we can use
+
+explain()
+
+--> after query you can add explain
+
+like db.collection.find({field:"akil"}).explain()
+
+
+--> we can also give optional parameter ExecutionStat to get propery it will show how many document examinated for this opration
+
+db.collection.field({field:"akil"}).explain('executionStat')

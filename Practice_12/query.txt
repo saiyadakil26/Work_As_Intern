@@ -99,13 +99,7 @@ output :
   { _id: ObjectId("63c7d2afe143bf2b601e107b") }
 ]
 
-
-7) find number of post by date
-
-Query :  db.post_time.aggregate({$group:{_id:{$dateToString: { format: "%Y-%m-%d", date: "$createdAt"}},count:{$sum:1}}})
-output : [ { _id: '2026-03-22', count: 1 }, { _id: '2023-01-20', count: 3 } ]
-
-8) generate bill by usin following rule
+7) generate bill by usin following rule
 -> per account price is $5
 -> for metrocity 20% extra charge
 -> for primium accounts 20% more extra charge
@@ -120,3 +114,8 @@ output :
   { _id: ObjectId("63c7d2afe143bf2b601e107c"), final_bill: 0 },
   { _id: ObjectId("63c7d2afe143bf2b601e107d"), final_bill: 0 }
 ]
+
+8) find number of post by date
+
+Query :  db.post_time.aggregate({$group:{_id:{$dateToString: { format: "%Y-%m-%d", date: "$createdAt"}},count:{$sum:1}}})
+output : [ { _id: '2026-03-22', count: 1 }, { _id: '2023-01-20', count: 3 } ]
