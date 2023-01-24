@@ -66,16 +66,20 @@ const validate_schema = async (data,token)=>{
         if (!token) {
             if( data.user_type != "owner") rej(`You can only Signup as owner`)
         }
+
         for (const el of key_schema) {
+            if (data[el] && typeof data[el]=="string" && el!='password') data[el]=data[el].trim().toLowerCase()
             if (signup_schema[el].default && ! data[el]) data[el] = signup_schema[el].default
             if (signup_schema[el].option && ! (signup_schema[el].option?.includes(data[el]))) rej(`${data[el]} is Invalid ${el}`)
             if((signup_schema[el].required) && ! data[el]) rej(`${el} is required`)
             if( data[el] && !(type_validator(data[el],signup_schema[el].type))) rej(`${el} is Must be the type of ${signup_schema[el].type}`)
-            if((signup_schema[el].required) && (signup_schema[el].valid) && ! (signup_schema[el].valid(data[el]))) rej(`${el} is not valid`)
+            if(data[el] && (signup_schema[el].valid) && ! (signup_schema[el].valid(data[el]))) rej(`${el} is not valid`)
             if (signup_schema[el].uniq && !(await find_uniq(el,data[el]))) rej(`${el} is Must be Uniq.`)
         }
+
         const secret = process.env.secret;  
         data["password"]= crypto.createHmac('sha256', secret).update(data.password.trim()).digest('hex');
+        
         res(data)
     })
 }

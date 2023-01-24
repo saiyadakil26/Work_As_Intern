@@ -9,8 +9,6 @@ const db_Connection = async() => {
                 let connection_string=process.env.connection_string
                 mongodb_client = new MongoClient(connection_string);
                 await mongodb_client.connect();
-                mongodb_client.db('mytest')
-            //    console.log("DataBase connected Succsessfuly");
                 return mongodb_client
             } catch (e) {
                 console.log("Error : Database Connection Error.",e);

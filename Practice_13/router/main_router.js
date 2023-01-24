@@ -5,7 +5,7 @@ const group=require('./group')
 const router=new rout()
 
 router.get('/',async(ctx)=>{
-    ctx.body="Hello From Server Side"
+    ctx.body="Hello From SocialPilot !"
 })
 
 router.use(signup.routes()).use(signup.allowedMethods())

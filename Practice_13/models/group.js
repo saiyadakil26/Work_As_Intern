@@ -36,6 +36,7 @@ const group_model=(val,token)=>{
         else rej("Please Login First")
 
         for (const el of key_schema) {
+            if (data[el] && typeof data[el]=="string") data[el]=data[el].trim().toLowerCase()
             if((group_schema[el].required) && ! data[el]) rej(`${el} is required`)
             if( data[el] && !(type_validator(data[el],group_schema[el].type))) rej(`${el} is Must be the type of ${group_schema[el].type}`)
             if((group_schema[el].required) && (group_schema[el].valid) && !  (await group_schema[el].valid(data[el],data.owner_id))) rej(`${el} is not valid`)

@@ -3,12 +3,18 @@ const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer');
 require('dotenv').config()
   
-const signup_user = async (val,DataBase="mytest",collection="user")=>{
-    const conn= await db_Connection()
-    let db = conn.db(DataBase).collection(collection)
-    const token = jwt.sign({email:val.email,user_type:val.user_type},val.email)
-    await db.insertOne(val)
-    return token
+const signup_user = (val,DataBase="mytest",collection="user")=>{
+    return new Promise(async(res,rej)=>{
+        try {
+            const conn= await db_Connection()
+            let db = conn.db(DataBase).collection(collection)
+            const token = jwt.sign({email:val.email,user_type:val.user_type},val.email)
+            await db.insertOne(val)
+            res(token) 
+        } catch (err) {
+            rej("Sorry Something Went wrong ",err)
+        }
+    })
 }
 
 const invite_user =async(val,data)=>{
@@ -36,7 +42,7 @@ const invite_user =async(val,data)=>{
                     http://localhost:3000/signup?id=${token}`
             };
             transporter.sendMail(mail,(err,info)=>{
-                if (err) rej("Error When sending mail")
+                if (err) rej("Error When sending mail") 
                 else res()
             })  
         }

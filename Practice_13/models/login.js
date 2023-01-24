@@ -24,6 +24,7 @@ const login_model=(val,token)=>{
             rej("You are already login.")
         } 
         for (const el of key_schema) {
+            if (data[el] && typeof data[el]=="string" && el!="password") data[el]=data[el].trim().toLowerCase() 
             if((login_schema[el].required) && ! data[el]) rej(`${el} is required`)
             if( data[el] && !(type_validator(data[el],login_schema[el].type))) rej(`${el} is Must be the type of ${login_schema[el].type}`)
             if((login_schema[el].required) && (login_schema[el].valid) && ! (login_schema[el].valid(data[el]))) rej(`${el} is not valid`)

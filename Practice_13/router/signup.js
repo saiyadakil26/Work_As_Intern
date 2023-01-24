@@ -6,7 +6,7 @@ const {signup_user,invite_user}=require('../controler/signup')
 const router=new rout()
 
 router.get('/signup',async(ctx)=>{
-    ctx.body="Hello From Signup get"
+    ctx.body="Signup Page"
 })
 
 router.post('/signup',async(ctx)=>{
