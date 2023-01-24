@@ -1,11 +1,13 @@
 const {MongoClient}=require('mongodb')
+require('dotenv').config()
 
 let mongodb_client
 
 const db_Connection = async() => {
     if(!mongodb_client){
             try {
-                mongodb_client = new MongoClient('mongodb://127.0.0.1:27017');
+                let connection_string=process.env.connection_string
+                mongodb_client = new MongoClient(connection_string);
                 await mongodb_client.connect();
                 mongodb_client.db('mytest')
             //    console.log("DataBase connected Succsessfuly");

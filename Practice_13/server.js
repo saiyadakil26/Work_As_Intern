@@ -1,9 +1,10 @@
 const Koa=require('koa')
+require('dotenv').config()
 const {router}=require('./router/main_router')
 
 const app=new Koa()
 
-const Port =process.env.Port || 3000
+const Port =process.env.Port || 5000
 
 app.use(router.routes()).use(router.allowedMethods())
 app.use(async (ctx) => {
@@ -14,5 +15,5 @@ app.use(async (ctx) => {
 })
 
 app.listen(Port,()=>{
-    console.log(`Application Rinnig at http://localhost:${Port}`);
+    console.log(`Application Runnig at http://localhost:${Port}`);
 })

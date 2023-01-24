@@ -2,6 +2,7 @@ const type_validator = require('../validators/type_validator')
 const {is_email,is_mobile,is_strong_pass} =require('../validators/email_password_mobile')
 const find_uniq=require('../validators/find_uniq')
 const jwt=require('jsonwebtoken')
+require('dotenv').config()
 const crypto = require('crypto');
 
 const signup_schema={
@@ -73,7 +74,7 @@ const validate_schema = async (data,token)=>{
             if((signup_schema[el].required) && (signup_schema[el].valid) && ! (signup_schema[el].valid(data[el]))) rej(`${el} is not valid`)
             if (signup_schema[el].uniq && !(await find_uniq(el,data[el]))) rej(`${el} is Must be Uniq.`)
         }
-        const secret = '1234536478563940849304975937263s';  
+        const secret = process.env.secret;  
         data["password"]= crypto.createHmac('sha256', secret).update(data.password.trim()).digest('hex');
         res(data)
     })

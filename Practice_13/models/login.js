@@ -2,6 +2,7 @@ const { is_email } = require("../validators/email_password_mobile")
 const type_validator = require('../validators/type_validator')
 const jwt=require('jsonwebtoken')
 const crypto = require('crypto');
+require('dotenv').config()
 
 let login_schema={
     user_name:{
@@ -27,7 +28,7 @@ const login_model=(val,token)=>{
             if( data[el] && !(type_validator(data[el],login_schema[el].type))) rej(`${el} is Must be the type of ${login_schema[el].type}`)
             if((login_schema[el].required) && (login_schema[el].valid) && ! (login_schema[el].valid(data[el]))) rej(`${el} is not valid`)
         }
-        const secret = '1234536478563940849304975937263s';  
+        const secret = process.env.secret;  
         data["password"]= crypto.createHmac('sha256', secret).update(data.password.trim()).digest('hex');
         res(data)  
     })

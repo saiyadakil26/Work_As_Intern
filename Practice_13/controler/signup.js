@@ -1,7 +1,7 @@
-
 const db_Connection=require('../db/connection')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer');
+require('dotenv').config()
   
 const signup_user = async (val,DataBase="mytest",collection="user")=>{
     const conn= await db_Connection()
@@ -21,12 +21,11 @@ const invite_user =async(val,data)=>{
                 service: 'gmail',
                 auth: {
                 type: 'OAuth2',
-                user: 'saiyadakil26@gmail.com',
-                pass: '7863861183',
-                clientId: '161286714449-g4t8p5ci0qefe2pcfg9g9u5j39u7il96.apps.googleusercontent.com',
-                clientSecret: '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',
-                refreshToken: "1//04aw4XgGQtK4pCgYIARAAGAQSNwF-L9IraZFBWH-rKUYm-RN2UX-JaOJTuDzE74VJyhCxii-My5KCjjdXq2JZ6ZuKyEyWOdcXOBw"
-
+                user: process.env.email,
+                pass: process.env.password,
+                clientId: process.env.client_id,
+                clientSecret: process.env.client_secret,
+                refreshToken: process.env.refresh_token
                 }
             });
             const mail = {
