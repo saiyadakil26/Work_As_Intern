@@ -25,7 +25,17 @@ const crypto = require('crypto')
 // console.log(verify.verify(publicKey,signature,'hex'));
 
 // !----- cipher
+// let key=crypto.randomBytes(32)
+// let iv=crypto.randomBytes(16)
+// const cipher=crypto.createCipheriv('aes-256-cbc',key,iv)
+// let increapt=cipher.update('mypassword','utf-8','hex')
+// increapt+=cipher.final('hex')
+// console.log(increapt);
 
-// let has=crypto.createCipheriv('aes-128-ccm')
+// const decipher=crypto.createDecipheriv('aes-256-cbc',key,iv)
+// let decrypt=decipher.update(increapt,'hex','utf-8')
+// decrypt+=decipher.final('utf-8')
+// console.log(decrypt);
 
-//! hkdf,pdkdf,encrypt,decrypt
+
+//! hkdf,pdkdf

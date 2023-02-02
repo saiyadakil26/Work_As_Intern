@@ -15,7 +15,8 @@ router.post('/signup',async(ctx)=>{
         const data = await body_parser(ctx.req)
         const valid = await model_validator(data,token_pass)
         const token = await signup_user(valid)
-        ctx.res.writeHead(200,"ok")
+        ctx.status=300
+        //ctx.res.writeHead(200,"ok")
         ctx.body=`User added Succsessfully Your Authentication Token is ${token}`
     } catch (error) {
         ctx.res.writeHead(400,"Internal Server Error")

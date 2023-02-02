@@ -42,7 +42,7 @@ const invite_user =async(val,data)=>{
                     http://localhost:3000/signup?id=${token}`
             };
             transporter.sendMail(mail,(err,info)=>{
-                if (err) rej("Error When sending mail") 
+                if (err) rej(err.toString()) 
                 else res()
             })  
         }
