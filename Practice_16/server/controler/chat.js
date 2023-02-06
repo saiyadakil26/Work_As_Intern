@@ -1,5 +1,6 @@
 const {conn}=require('../config/connection')
 const response_send = require('../config/response')
+const {BSON}=require('mongodb')
 const controler_chat=async(ctx,next)=>{
     try {
         let data=ctx.request.body
@@ -42,4 +43,27 @@ const controler_get_group= async (ctx,next)=>{
     }
 }
 
-module.exports={controler_chat,controler_get_chat,controler_get_group}
+const controler_add_group= async (ctx,next)=>{
+    try {
+        let data=ctx.request.body
+        let db =conn.db('chat_app').collection('group') //establish connection
+        let res=await db.insertOne(data)
+        response_send(ctx,200,{msg:"Done"})    
+    } catch (error) {
+        response_send(ctx,200,{err:error.toString()}) 
+    }
+}
+
+const controler_delete_group=async(ctx,next)=>{
+    try {
+        let data=ctx.request.body
+        console.log(data);
+        let db =conn.db('chat_app').collection('group') //establish connection
+        let res=await db.deleteOne({_id:new BSON.ObjectId( data.id ) })
+        console.log(data);
+        response_send(ctx,200,{msg:"Done"})    
+    } catch (error) {
+        response_send(ctx,200,{err:error.toString()}) 
+    }
+}
+module.exports={controler_chat,controler_get_chat,controler_get_group,controler_add_group,controler_delete_group}

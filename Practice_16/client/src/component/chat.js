@@ -1,9 +1,10 @@
 import Chatcontener from "./chatcontener"
 import Header from "./header" 
+import socket from './socket'
 import {io} from 'socket.io-client'
 import { useEffect, useRef, useState } from "react"
 const Chat=()=>{
-    const socket = useRef()
+    // const socket = useRef()
     const [user,setuser]=useState()
     useEffect(()=>{
         let id=JSON.parse(localStorage.getItem('user'))[0]._id
@@ -12,10 +13,10 @@ const Chat=()=>{
         }
     })
     useEffect(()=>{
-        if (user) {
-            socket.current=io('http://localhost:8000/')
-            socket.current.emit('add-user',user)   
-        }
+            if (user) {     
+                // socket.current= io('http://localhost:8000/')
+                // socket.emit('add-user',user)   
+            }
     },[user])
 return(
     <Chatcontener socket={socket}/>

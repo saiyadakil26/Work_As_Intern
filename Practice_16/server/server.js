@@ -1,12 +1,12 @@
 const koa=require('koa')
 const koa_bodyparser=require('koa-bodyparser')
 const router=require('./router/main_route')
-const cors=require('cors')
+const {createClient}=require('redis')
 require('dotenv').config()
 require('./config/connection').db_connect()
 const socket = require('socket.io')
 const app=new koa()
-
+const http = require('http')
 
 const Port=process.env.Port || 7000
 app.use(koa_bodyparser())
@@ -24,31 +24,65 @@ const io = socket(server,{
     }
 })
 
-global.online_member = new Map()
+    const redis = createClient(6379, "127.0.0.1")
+    redis.connect()
 
-io.on('connection',(socket)=>{
-
-    global.chatsocket=socket
-
-    socket.on('add-user',(id)=>{
-        online_member.set(id,socket.id)
+    redis.on("connection", () => {
+      console.log("connected!")
     })
 
-    socket.on('send-msg',(data)=>{
-        const sendUserSocket=online_member.get(data.to)
+// global.online_member = new Map()
+
+io.on('connection',async (socket)=>{
+    // global.chatsocket=socket
+    socket.on('joined', ()=>{
+        socket.emit("message" , "new User joined")
+    })
+
+    socket.on('add-user',async(id)=>{
+            socket.owner=id
+            let Sockets = await redis.get(id) || JSON.stringify([])
+            Sockets=JSON.parse(Sockets)
+            Sockets.push(socket.id)
+            console.log(Sockets);
+            Sockets=Array.from(new Set(Sockets)) 
+            Sockets=JSON.stringify(Sockets)
+            redis.set(id,Sockets)
+    })
+
+    socket.on('send-msg',async(data)=>{
+        let sendUserSocket= await redis.get(data.to)
+        sendUserSocket =JSON.parse(sendUserSocket)
         if (sendUserSocket) {
-            socket.to(sendUserSocket).emit("msg-recieve",data)
+            for (const i of sendUserSocket) {
+                // console.log(i);
+                socket.to(i).emit("msg-recieve",data)
+            }
         }
     })
 
     socket.on('join_room',(data)=>{
         socket.join(data)
     })
+
     socket.on('group-msg',(data)=>{
         socket.join(data.room)
         socket.to(data.room).emit('msg-group',data)
     })
+
     socket.on('global-msg',(data)=>{
         socket.broadcast.emit('message',data)
     })
+    socket.on("disconnect", async () => {
+        let a=socket.owner || ""
+        let listSocket= await redis.get(a)
+        listSocket =JSON.parse(listSocket) || []
+        listSocket.splice(listSocket.indexOf(socket.id),1)
+        listSocket=JSON.stringify(listSocket)
+        if (socket.owner) {  
+            redis.set(socket.owner,listSocket)
+        }
+    });
+
 })
+
