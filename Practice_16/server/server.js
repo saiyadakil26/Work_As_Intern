@@ -44,10 +44,9 @@ io.on('connection',async (socket)=>{
             let Sockets = await redis.get(id) || JSON.stringify([])
             Sockets=JSON.parse(Sockets)
             Sockets.push(socket.id)
-            console.log(Sockets);
             Sockets=Array.from(new Set(Sockets)) 
             Sockets=JSON.stringify(Sockets)
-            redis.set(id,Sockets)
+            await redis.set(id,Sockets)
     })
 
     socket.on('send-msg',async(data)=>{
@@ -80,7 +79,7 @@ io.on('connection',async (socket)=>{
         listSocket.splice(listSocket.indexOf(socket.id),1)
         listSocket=JSON.stringify(listSocket)
         if (socket.owner) {  
-            redis.set(socket.owner,listSocket)
+            await redis.set(socket.owner,listSocket)
         }
     });
 

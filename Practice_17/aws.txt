@@ -1,0 +1,69 @@
+**************** SQS AWS ****************
+
+=> fast,fully manage, reliable ,message Q service . (pull service) SNS (Push service)
+
+=> it is a webservice .
+
+=> storing message between server asyncronousaly.
+
+=> dead later q.
+
+=> decoupaling method.
+
+=> visibility - timeout .
+
+=> Auto Scaling
+
+=> 2 type Q -standard & FIFO
+
+=> sort polling, long poling
+
+=> retension period, delivery delay ,recieve massage wait time
+
+=> used with DynamoDB, EC2, ECS, lambada, s3
+
+
+
+**************** lambda AWS ****************
+
+--> serverless
+
+--> bill based on request (time)
+
+--> zero administration
+
+--> CPU,natwork,memory,os & server maintanance.
+
+--> lambda vs Ec2
+
+--> lambada platform as service ,Infrastructure as service
+
+--> node pyton c# go java ruby powershell
+
+--> event ,eventtriger,runtime,function,downstream resource,concourancy
+
+--> 28 max 3008MB X 64 , 1538 More multithread processor.
+
+--> Maximum execution Time . (15 minit)
+
+--> IAM Role.
+
+--> Access : AWS and non-aws 
+
+--> call lambada by - Async (event) Sync(push) poll-based(pull based)
+
+**************** S3 AWS ****************
+
+=> 	Standard | Amazon Glacier deep Archive (cheapest) | Amazon Glacier (Long Tearm) |
+
+
+	 One Zone IA | Inteligent Tiering (life cycle) | Amazon standard InFrequent Access
+
+
+
+
+cli in node
+
+
+ 
+

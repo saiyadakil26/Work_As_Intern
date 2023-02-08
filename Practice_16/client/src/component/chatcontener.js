@@ -2,13 +2,14 @@
 import{useEffect, useRef, useState} from 'react'
 import axios from "axios"
 import socket from './socket'
-import {useNavigate} from 'react-router-dom'
+import {json, useNavigate} from 'react-router-dom'
 
 const Chatcontener=()=>{
     //   (()=>{
     //     socket.emit('add-user',JSON.parse(localStorage.getItem('user'))[0]._id)
     // })()
     const [msg,setmsg]=useState()
+    const [active,setactive]=useState('Global')
     const [ group_title,set_groptitle]=useState()
     const [ group_member,set_gropmember]=useState([])
     const [arr,setarr]=useState([])
@@ -38,41 +39,52 @@ const Chatcontener=()=>{
 
         },[])
 
-        const clicked_render= async(ren)=>{
+        const clicked_render= async(data)=>{
+
+            let ren= data._id
+            setactive(data.email)
             setis_friend(true)
+
             if (arr.length !=0) {
                 const data={
-                    owner:JSON.parse(localStorage.getItem('user'))[0]._id,
-                    data_msg:{[localStorage.getItem('to')]:arr},
+                    from:JSON.parse(localStorage.getItem('user'))[0]._id,
+                    data_msg:arr,
                     to:localStorage.getItem('to')
                 }
                 let res= await axios.post('/api/chat',data)
             }
+
             if (ren !== localStorage.getItem('to')) {
-                let data={owner:JSON.parse(localStorage.getItem('user'))[0]._id}
+                let data={from:JSON.parse(localStorage.getItem('user'))[0]._id,to:ren}
                 axios.post('/api/chat_view',data).then((res)=>{
-                   setchat(res.data.msg[0].chat)
+                    setarr(res.data.msg[0].chat);
                 })    
-             localStorage.setItem('to',ren)
-             let new_arr=chat.filter((el)=>{
-                if(el[ren]) return el
-            })
-             setarr(new_arr[0][ren]);
+                localStorage.setItem('to',ren)  
             }
           
         }
 
-        const on_group=(room)=>{
-            socket.emit('join_room',room)
-            localStorage.setItem('group',room)
+        const on_group=async(room)=>{
+            socket.emit('join_room',room._id)
+            setactive(room.name)
+            localStorage.setItem('group',room._id)
             setis_friend(false)
             setis_global(false)
-            setGroupactive(room)
+            if (Groupactive.length !=0 ) {
+                console.log(Groupactive);
+                await axios.post('/api/group_set_chat',{id:Groupactive,chat:arr})
+            }
+            setGroupactive(room._id)
             setarr([])
+            await axios.post('/api/group_chat',{id:room._id}).then((res)=>{
+                setarr(res.data.msg);
+            })
+            
         }
 
         const set_glob=()=>{
             setis_global(true)
+            setactive('Global')
             setarr([])
         }
 
@@ -97,7 +109,7 @@ const Chatcontener=()=>{
             else{
                 socket.emit("global-msg",{msg,from:JSON.parse(localStorage.getItem('user'))[0]._id})
             }
-            setarr((pre)=>[{msg,send:true},...pre]);
+            setarr((pre)=>[{msg,from:JSON.parse(localStorage.getItem('user'))[0]._id},...pre]);
             e.target.value=""
         } 
     }
@@ -109,7 +121,7 @@ const Chatcontener=()=>{
             name=prompt('Enter Group Name')   
             set_groptitle(name)
         } 
-        document.getElementById('box').classList.remove('hidden')
+        if(name) document.getElementById('box').classList.remove('hidden')
     }
     const add_member=(e,email)=>{
         e.preventDefault()
@@ -147,20 +159,20 @@ const Chatcontener=()=>{
          if (socket) {
             socket.on("msg-recieve",(data)=>{
                 if (data.from === localStorage.getItem('to')) {
-                    setarr([{msg:data.msg,send:false},...arr]);
+                    setarr([{msg:data.msg,from:data.from},...arr]);
                 }else{
                     //stor it
                 }
             })
             socket.on("msg-group",(data)=>{
                 if (data.room === localStorage.getItem('group')) {
-                    setarr([{msg:data.msg,send:false},...arr]);
+                    setarr([{msg:data.msg,from:data.from},...arr]);
                 }
                 
             })
             socket.on("message",(data)=>{
                setarr_msg(data.msg)
-                setarr([{msg:data.msg,send:false},...arr]);
+                setarr([{msg:data.msg,from:data.from},...arr]);
             })
          }
     },[arr])
@@ -187,6 +199,7 @@ return(
     })}
     <button onClick={(e)=>generate_group(e)} className='bg-blue-500 text-white p-2 m-2 rounded-md'> Create Now </button>
 </div>
+
 <div className="md:w-[400px]">
            <div className=" bg-slate-500 w-full h-[100vh] p-1">
             <div className="flex justify-center">
@@ -199,7 +212,7 @@ return(
             <p className="text-md text-white mt-1 font-semibold"> Direct Message </p> 
             {friend.map((el,i)=>{
                 return(
-                    <div key={i} onClick={()=>{clicked_render(el._id)}} className="w-[100%] h-[50px] p-[5px] hover:bg-white cursor-pointer flex flex-row">
+                    <div key={i} onClick={()=>{clicked_render(el)}} className="w-[100%] h-[50px] p-[5px] hover:bg-white cursor-pointer flex flex-row">
                     <div className=" rounded-full bg-yellow-400 w-[40px] h-[40px] mx-2 "></div>
                     <p className="font-bold">{el.email}</p>
                     </div>
@@ -209,7 +222,7 @@ return(
             <p className="text-md text-white mt-1 font-semibold"> Group Message </p>  
             {Group.map((el,i)=>{
                 return(
-                    <div key={i} onClick={()=>{on_group(el._id)}}  className="w-[100%] h-[50px] p-[5px] hover:bg-white cursor-pointer flex flex-row items-center">
+                    <div key={i} onClick={()=>{on_group(el)}}  className="w-[100%] h-[50px] p-[5px] hover:bg-white cursor-pointer flex flex-row items-center">
                     <div className=" rounded-full bg-yellow-400 w-[40px] h-[40px] mx-2 "></div>
                     <p className="font-bold">{el.name}</p>
                     {el.owner == JSON.parse(localStorage.getItem('user'))[0]._id ?<button onClick={(e)=>{delete_group(e,el._id)}} className='bg-red-500 p-2 m-2 text-white rounded-lg'>Delete</button> :"" }
@@ -221,7 +234,7 @@ return(
             </div>
             <div className="w-[100%] h-[50px] p-[5px] flex flex-row">
                     <div className=" rounded-full bg-yellow-400 w-[40px] h-[40px] mx-2 "></div>
-                    <p className="font-bold">My Account</p>
+                    <p className="font-bold">{JSON.parse(localStorage.getItem('user'))[0].email}</p>
                     <button className=' bg-red-600 w-[80px] h-[40px] ml-2 rounded-md text-white' onClick={(e)=>logout(e)}>Logout</button>
             </div>
            </div>
@@ -230,15 +243,17 @@ return(
 
     <div className="w-[100%]" >
 
-        <div className="w-[100%] h-[70px] bg-black opacity-60  fixed top-0">
-            
+        <div className="w-[100%] h-[70px] bg-black opacity-60  fixed top-0 text-white flex items-center">
+        <div className=" rounded-full bg-yellow-400 w-[40px] h-[40px] ml-2 "></div>
+           <p className=' font-bold h-full p-5 w-[100%]'>{active}</p>
         </div>
+
         <div className="min-w-[100%]  h-[100vh] bg-blue-400 flex flex-col-reverse overflow-y-scroll pb-20">
         {
                 arr.map((el,i)=>{
                 return(
                     <div key={i}>
-                { el.send ?
+                { el.from === JSON.parse(localStorage.getItem('user'))[0]._id ?
                     <p className=" break-words bg-white w-fit p-2 m-2 rounded-b-xl rounded-tr-xl max-w-[180px] md:max-w-[500px]">{el.msg}</p> :
                     <p className="break-words bg-blue-500 w-fit p-2 m-2 rounded-b-xl rounded-tl-xl ml-auto max-w-[180px] md:max-w-[500px]">{el.msg}</p>
                 }

@@ -1,6 +1,7 @@
 const insert_one = async (db,data)=>{
     return await db.insertOne({...data})
 }
+
 const countDocument = async (db,data) =>{
    return await db.countDocuments({...data})
 }
