@@ -1,5 +1,6 @@
 const response_send = require("../config/response")
 const {is_email}=require('../validator/email_password_mobile')
+
 const model_invite = async (ctx,next)=>{
     let {username:email,user_type}=ctx.request.body
     // console.log(ctx.request.body);
@@ -22,4 +23,6 @@ const model_invite = async (ctx,next)=>{
     }
 }
 
-module.exports=model_invite
+
+
+module.exports={model_invite}

@@ -31,6 +31,10 @@ const update_by_email = async (field,data) =>{
     return await db.updateOne({email:field},{$set:{...data}})
 }
 
+const find_and_update_role=async(owner,field,value)=>{
+    return await db.updateOne({email:owner},{$set:{[field]:value}})
+}
+
 // const user_by_ownerid=async(data)=>{
 //    return await db.find({owner_id: data}).project({_id:0,email:1}).toArray()
 // }
@@ -39,6 +43,7 @@ module.exports={insert_one,find,
     countDocument,
     update_by_email,
     update_field,
-    find_by_id_invite
+    find_by_id_invite,
+    find_and_update_role
     // user_by_ownerid
 }
