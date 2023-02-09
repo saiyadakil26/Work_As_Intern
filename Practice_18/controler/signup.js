@@ -12,7 +12,7 @@ const controler_signup = async (ctx,next)=>{
         data["password"]= crypto.createHmac('sha256', secret).update(data.password.trim()).digest('hex'); // has the password
         let {email,user_type}=data
         const token = await generate_token(ctx,{email,user_type}) // generate token
-       // await insert_one (data) //execute query
+        await insert_one (data) //execute query
         
        
         //!------------ send Succsess mssage --------------!
@@ -29,10 +29,11 @@ const controler_signup = async (ctx,next)=>{
        
         if (data.owner_id) {
             const res= await find({email:data.email})
-            const user_role={[data.owner_id]:data.user_type}
+            const user_role={email:data.owner_id,type:data.user_type}
+            if (data.user_type=='cs')user_role["is_permited"]=false
 
             if(res[0]?.role){
-                let is_first= res[0].role.filter((el)=>{ if(el[data.owner_id]) return el})
+                let is_first= res[0].role.filter((el)=>{ if(el.email==data.owner_id) return el})
                 if (is_first.length == 0) {   
                     res[0].role.push(user_role)
                     await update_by_email(res[0].email,{role:res[0].role})

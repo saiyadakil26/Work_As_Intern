@@ -1,6 +1,6 @@
 const send_mail = require("../common_function/send_mail")
 const response_send = require("../config/response")
-const { countDocument, find, update_by_email, update_field, find_by_id_invite, find_and_update_role } = require("../query/user")
+const { find, update_by_email, update_field, find_by_id_invite, update_role_query,delete_by_email, delete_user_by_email, give_accsess_by_id } = require("../query/user")
 const { generate_token } = require("../validator/generate_token")
 
 const invite_user=async(ctx,next)=>{
@@ -47,22 +47,17 @@ const update_role = async (ctx,next)=>{
     let data= ctx.request.body
     let owner_data=ctx.state.user_data
     try{
-        let res= await find({email:data.username})
-        let invited=res[0].role
-        let count=0
-        invited=invited.filter((el)=>{
-            if(el[owner_data.email]){
-                count++
-                 return el[owner_data.email]=data.user_type
-                }
-            else return el
-        })
-        if (count!=0) {
-            res=await update_by_email(data.username,{'role':invited})
+        let obj={"role.$.type":data.user_type}
+        if (data.user_type=='cs') {
+             obj["role.$.is_permited"]=false
+        }
+        let res=await update_role_query(data.username,owner_data.email,obj)
+        if (res.modifiedCount!=0) {
             response_send(ctx,200,{msg:"Role Updated Succsessfully"})
         }
         else{
-            response_send(ctx,200,{msg:"This user is not invite by You"})
+            if (res.matchedCount) response_send(ctx,200,{error:`${data.username} Role Alredy as ${data.user_type}`})
+            else response_send(ctx,200,{error:`${data.username} is Not in Team Yet`})
         }
         
         
@@ -71,4 +66,27 @@ const update_role = async (ctx,next)=>{
     }
 }
 
-module.exports={invite_user,update_role}
+const delete_user=async (ctx,next)=>{
+    let data= ctx.request.body
+    let owner_data=ctx.state.user_data
+    try {
+       await delete_by_email(data.username,owner_data.email)
+        let res= await find({email:data.username})
+        if(res[0].role.length==0){
+            await delete_user_by_email({email:data.username})
+        }
+        response_send(ctx,200,{msg:"User Deleted Succsessfully"})
+    } catch (error) {
+        response_send(ctx,200,{error:error.toString()})
+    }
+
+}
+
+const give_acsess=async (ctx,next)=>{
+    let data= ctx.request.body
+    let owner_data=ctx.state.user_data
+    await give_accsess_by_id({email:data.username,"role.email":owner_data.email},data.permission)
+    response_send(ctx,200,{msg:"Permission Allocated."})
+}
+
+module.exports={invite_user,update_role,delete_user,give_acsess}
