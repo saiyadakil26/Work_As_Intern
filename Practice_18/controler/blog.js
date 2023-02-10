@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const response_send = require("../config/response");
 const { insert_one, find, update_blog_query, delete_blog_query } = require("../query/blog");
+const { find_comment } = require("../query/comment");
 
 const controler_blog=async(ctx,next)=>{
     let data=ctx.request.body
@@ -13,7 +14,12 @@ const controler_blog=async(ctx,next)=>{
 const get_all_blog=async(ctx,next)=>{
     let obj={}
     if (ctx.request.query.id) obj["_id"]=new ObjectId(ctx.request.query.id)
-    let res=await find(obj,{_id:0,title:1,desc:1,likes:{$size:"$like_by"}},{create_at:1})
+    let res=await find(obj,{title:1,desc:1,likes:{$size:"$like_by"}},{create_at:1})
+    for (const i of res) {
+        console.log(i);
+        let comment=await find_comment({post_id:i._id.toString()},{_id:0,comment:1,comment_by:1},{})
+        i["comment"]=comment;
+    }
     response_send(ctx,200,{msg:res})
 }
 
@@ -45,7 +51,6 @@ const like_dislike=async(ctx,next)=>{
             res[0].likes++
         }
         await update_blog_query(obj,{like_by:likes})
-        res[0].like_by=undefined
         response_send(ctx,200,{msg:res})
     }
 }

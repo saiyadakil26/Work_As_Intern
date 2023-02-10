@@ -1,5 +1,5 @@
 let comment={
-    text:{
+    comment:{
         type:"string",
         required:true,
     },
@@ -16,10 +16,6 @@ let comment={
     post_id:{
         type:"string",
         required:true,
-    },
-    is_deleted:{
-        type:"boolean",
-        default:false
     }
 }
 
