@@ -2,7 +2,7 @@ const {is_email,is_strong_pass}=require('../validator/email_password_mobile')
 const response_send=require('../config/response')
 
 const model_login = async(ctx,next)=>{
-    let {username,password}=ctx.request.body // get data
+    let {username,password,account}=ctx.request.body // get data
 try {
     username=username && username.trim().toLowerCase()  //trim value
     password= password && password.trim() 
@@ -23,7 +23,7 @@ try {
         response_send(ctx,403,{error:err}) // In case of error in validation
     }
     else{
-        ctx.request.body={email:username,password}
+        ctx.request.body={email:username,password,account}
         await next() // pass to next middlewear
     }
 
