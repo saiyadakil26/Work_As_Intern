@@ -2,6 +2,7 @@ const response_send = require("../config/response");
 const {insert_one,countDocument, find, update_by_email}=require('../query/user')
 const crypto=require('crypto');
 const { generate_token } = require("../validator/generate_token");
+const { delete_invited } = require("../query/invited_user");
 
 const controler_signup = async (ctx,next)=>{
 
@@ -29,6 +30,7 @@ const controler_signup = async (ctx,next)=>{
        
         if (data.owner_id) {
             const res= await find({email:data.email})
+            await delete_invited({owner_email:data.owner_id})
             const user_role={email:data.owner_id,type:data.user_type}
             if (data.user_type=='cs')user_role["is_permited"]=false
 
@@ -50,7 +52,6 @@ const controler_signup = async (ctx,next)=>{
             }
         }
         else{
-            data["invited_user"]=[]
            await signup()
         }
         

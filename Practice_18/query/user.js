@@ -17,22 +17,12 @@ const countDocument = async (data) =>{
     return await db.countDocuments({...data})
 }
 
-const find_by_id_invite=async(id,invite)=>{
-    
-return await db.find({
-   $and:[
-    {email:id},
-    {"invited_user":{$elemMatch:{$eq:invite}}}
-   ]
-}).toArray()
-}
 
 const update_by_email = async (field,data) =>{
     return await db.updateOne({email:field},{$set:{...data}})
 }
 
 const delete_by_email = async (field,owner) =>{
-    await db.updateOne({email:owner},{$pull:{invited_user:field}})
     return await db.updateOne({email:field,"role.email":owner},{$pull:{"role":{email:owner}}})
 }
 
@@ -60,7 +50,6 @@ module.exports={insert_one,find,
     countDocument,
     update_by_email,
     update_field,
-    find_by_id_invite,
     find_and_update_role,
     update_role_query,
     delete_by_email,

@@ -61,8 +61,6 @@ const update_comment_model=async(ctx,next)=>{
     if (!data.id) {
         data["id"]=ctx.request.query.id
     }
-    let data_field=Object.keys(data)
-    let err={}
     try {
         
         let res=await find_comment({_id:new ObjectId(data.id)},{},{})
@@ -71,8 +69,11 @@ const update_comment_model=async(ctx,next)=>{
             return
         }
          else{
-            let res1 = await find({_id:new ObjectId(res[0].post_id)},{},{})
-            let res2=await find_user({email:res1[0].owned_by})
+            
+            // let res1 = await find({_id:new ObjectId(creater_data.email)},{},{})
+            // console.log(res1);
+            // let res2=await find_user({email:creater_data.email})
+            // let invite
             if (!(res2.length == 1)) {
                 response_send(ctx,403,{err:"You don't have permission"})
                 return
