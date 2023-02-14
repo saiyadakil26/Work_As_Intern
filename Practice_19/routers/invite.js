@@ -1,16 +1,20 @@
 const router = require('./koa')
 const auth = require('../middleware/authentication')
-const is_owner = require('../middleware/is_owner')
-const {model_invite,model_delete, model_give_acsess} = require('../model/invite')
-const { invite_user, update_role, give_acsess, delete_user } = require('../controler/invite_user')
-const is_owner_admin = require('../middleware/is_owner_or_admin')
+const {model_invite,model_delete} = require('../model/invite')
+const { invite_user, update_role, delete_user } = require('../controler/invite_user')
+const has_permission = require('../middleware/has_pemission')
+const compose = require('koa-compose')
+
 router.get('/invite',(ctx)=>{  // handle get request
     ctx.body="invite Page"
 })
 
-router.post('/invite',auth,is_owner,model_invite,invite_user) // post request 
-router.put('/updaterole',auth,is_owner_admin,model_invite,update_role)
-router.put('/give_acsess',auth,is_owner_admin,model_delete,model_give_acsess,give_acsess) 
-router.delete('/deleteuser',auth,is_owner_admin,model_delete,delete_user)
+const has_owner_admin=compose([auth,has_permission("o","a")])
+const has_owner=compose([auth,has_permission("o")])
+
+router.post('/invite',has_owner,model_invite,invite_user) // post request 
+router.put('/updaterole',has_owner_admin,model_invite,update_role)
+// router.put('/give_acsess',auth,is_owner_admin,model_delete,model_give_acsess,give_acsess) 
+router.delete('/deleteuser',has_owner_admin,model_delete,delete_user)
 
 module.exports=router 

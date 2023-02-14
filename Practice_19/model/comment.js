@@ -6,6 +6,7 @@ const { ObjectId } = require('mongodb')
 const { find } = require('../query/blog')
 const find_user=require('../query/user').find
 const uuid=require('uuid')
+
 const comment_model=async(ctx,next)=>{
     let data=ctx.request.body
     const creater_data=ctx.state.user_data

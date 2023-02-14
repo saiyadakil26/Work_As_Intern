@@ -6,7 +6,6 @@ require('dotenv').config()
 require('./config/connection').db_connect()
 const socket = require('socket.io')
 const app=new koa()
-const http = require('http')
 
 const Port=process.env.Port || 7000
 app.use(koa_bodyparser())

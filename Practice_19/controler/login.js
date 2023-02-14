@@ -22,13 +22,13 @@ const controler_login = async (ctx,next) => {
                 user_type=role.type
                 owner=role.owner_id
                 if (role.type=="cs") {
-                    let token = await generate_token(ctx,{id:user_data[0]._id,user_type,permission:role.is_permited,owner})
+                    let token = await generate_token(ctx,{_id:user_data[0]._id,user_type,permission:role.is_permited,owner})
                     response_send(ctx,200,{msg:"Login succsessfuly",token})
                     return 
                 }
             }
 
-            const token = await generate_token(ctx,{id:user_data[0]._id,user_type,owner})
+            const token = await generate_token(ctx,{_id:user_data[0]._id,user_type,owner})
             response_send(ctx,200,{msg:"Login succsessfuly",token})
         }
         else response_send(ctx,200,{error:"Invalid Credential"})

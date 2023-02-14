@@ -1,10 +1,11 @@
 const response_send = require("../config/response");
 const { find } = require("../query/user");
 
-const has_permission=async(ctx,next)=>{
+const has_permission=(...arr)=>async(ctx,next)=>{
     let data=ctx.state.user_data
-    if (!(data.user_type === 'owner' || data.user_type === 'admin' || data.user_type === 'manager')) {
-        if (data.permission) await next()
+    let user_type=data.user_type[0]
+    if (!(arr.includes(user_type))) {
+        if (user_type=="c" && data.permission) await next()
         else response_send(ctx,403,{error:"You dont have permission."})
     }else{
         await next()

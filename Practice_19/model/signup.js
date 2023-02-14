@@ -1,6 +1,6 @@
 // !=== import Schema and validators
 const schema = require('../Schema/signup')
-const {is_email,is_strong_pass,is_mobile} = require('../validator/email_password_mobile')
+// const {is_email,is_strong_pass,is_mobile} = require('../validator/email_password_mobile')
 const type_validator = require('../validator/type_validator')
 const find_uniq = require('../validator/find_uniq')
 
@@ -16,19 +16,31 @@ const model_signup= async (ctx,next)=>{
     let schema_field = Object.keys(schema) // get  schema fields
     let data=ctx.request.body // get request body
     let err={} // error message
+    
+    if (ctx.request.method == "PUT"){
+        schema.email.uniq = false
+        schema.mobile_no.uniq = false,
+        schema.email.required=false,
+        schema.password.required=false,
+        schema.user_type.default=data.user_type
+    }
 
     let invited=ctx.request.query.id
     if (invited) {
         let invited_data= jwt.verify(invited,process.env.secret)
+                
         let obj_data= {email:invited_data.username,
             user_type:invited_data.user_type,
-            owner:invited_data.owner
+            owner:invited_data.owner || invited_data._id
         }
+
         schema.email.uniq = false
         schema.mobile_no.uniq = false
         data={...obj_data,...data}
+
         let owner_exist= await count_user({_id:invited_data.owner})
         let invit_db_exist= await count_invited_user(invited_data.username,invited_data.owner)
+        
         if(owner_exist !=1 || invit_db_exist!=1){
             response_send(ctx,403,{"error":"Your Invitation Expire.","is_Signup":false})
             return
@@ -58,7 +70,7 @@ const model_signup= async (ctx,next)=>{
             if( data[el] && el!="_id" && !(type_validator(data[el],schema[el].type))) temp_msg.push(`${el} is Must be the type of ${schema[el].type}`)
             
             // validate with custome function 
-            if(data[el] && (schema[el].valid) && ! (eval(schema[el].valid)(data[el]))) temp_msg.push(`${el} is not valid`)
+            if(data[el] && (schema[el].valid) && ! (schema[el].valid)(data[el])) temp_msg.push(`${el} is not valid`)
            
             // check for the uniq value 
             if (schema[el] && schema[el].uniq && !(await find_uniq(el,data[el]))) temp_msg.push(`${el} is Must be Uniq.`)
@@ -73,7 +85,9 @@ const model_signup= async (ctx,next)=>{
             response_send(ctx,403,{"error":err,"is_Signup":false})
         } else { 
             ctx.request.body=data
-            await next()
+            let usr_field=Object.keys(data)
+            if(usr_field.every(val=>schema_field.includes(val))) await next()
+            else response_send(ctx,403,{"error":"You are Enter Invalid Field","is_Signup":false})
         }
 
     } catch (error) {
